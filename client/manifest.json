@@ -1,0 +1,6 @@
+{
+  "name": "epicboard",
+  "short_name": "epicboard",
+  "start_url": "/",
+  "display": "standalone"
+}
