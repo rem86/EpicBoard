@@ -11,26 +11,53 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="../bower_components/sortable-list/sortable-list.html">
+<link rel="import" href="../bower_components/iron-icons/hardware-icons.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
 
 <dom-module id="my-view1">
   <template>
     <style include="shared-styles">
        :host {
         display: block;
-
         padding: 10px;
+      }
+
+      paper-icon-button.blue {
+        color: var(--paper-pink-500);
+        --paper-icon-button-ink-color: var(--paper-indigo-500);
+      }
+
+      paper-fab {
+        display: inline-block;
+        margin: 1px;
+        float: right;
+      }
+
+      paper-fab[label] {
+        font-size: 16px;
+        --paper-fab-background: #2196F3;
       }
     </style>
     <div class="card2">
-        <p>Board</p>
-      
+      <p>Board</p>
+
       <div class="col">
         ToDo
         <sortable-list on-sort-finish="_onSortFinish" dragging="{{dragging}}">
-          <div class="item">Item A</div>
+          <div class="item">
+            <paper-icon-button icon="hardware:keyboard-arrow-left" on-tap="onClose" class="blue" hidden={{!narrow}}>
+            </paper-icon-button>
+            Item A
+            <paper-icon-button icon="hardware:keyboard-arrow-right" on-tap="onClose" class="blue" hidden={{!narrow}}>
+            </paper-icon-button>
+          </div>
           <div class="item">Item B</div>
           <div class="item">Item C</div>
         </sortable-list>
+
+        <div>
+          <paper-fab mini label="+"></paper-fab>
+        </div>
       </div>
       <div class="col">
         WIP
