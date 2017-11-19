@@ -45,18 +45,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       <div class="col">
         ToDo
-        <sortable-list on-sort-finish="_onSortFinish" dragging="{{dragging}}">
-          <div class="item">
+        <sortable-list on-sort-finish="_onSortFinish" dragging="{{dragging}}" sortable=".item">
 
-              <paper-icon-button  icon="hardware:keyboard-arrow-left" on-tap="onClose" class="blue" hidden={{!narrow}}>
+            <template is="dom-repeat" items="{{ToDo}}" as="item">
+                <div class="item">
+               
+
+              <paper-icon-button ident$="{{item.id}}" icon="hardware:keyboard-arrow-left" on-tap="onClose" class="blue" hidden={{!narrow}}>
                 </paper-icon-button>
-                Task
-                <paper-icon-button icon="hardware:keyboard-arrow-right" on-tap="onClose" class="blue" hidden={{!narrow}}>
+                {{item}}
+                <paper-icon-button ident$="{{item.id}}" icon="hardware:keyboard-arrow-right" on-tap="onClose" class="blue" hidden={{!narrow}}>
                   </paper-icon-button>
 
           </div>
-          <div class="item">Item B</div>
-          <div class="item">Item C</div>
+        </template>
+        
         </sortable-list>
 
         <div>
@@ -87,6 +90,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       static get is() {
         return 'my-view1';
       }
+      static get properties(){
+        return {
+          ToDo: {
+            type: Array,
+            value: ["Item1","Item2","Item3"]
+          },
+          WIP: {
+            type: Array,
+            value: ["WItem1","WItem2","WItem3"]
+          },
+          Done: {
+            type: Array,
+            value: ["DItem1","DItem2","DItem3"]
+          }
+        }
+      }
+      _onSortFinish(event) {
+       const sortedItem = event.detail.target;
+     }
+
     }
 
     window.customElements.define(MyView1.is, MyView1);
