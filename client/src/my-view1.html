@@ -10,28 +10,51 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="shared-styles.html">
+<link rel="import" href="../bower_components/sortable-list/sortable-list.html">
 
 <dom-module id="my-view1">
   <template>
     <style include="shared-styles">
-      :host {
+       :host {
         display: block;
 
         padding: 10px;
       }
     </style>
-
     <div class="card">
-      <div class="circle">1</div>
-      <h1>View One</h1>
-      <p>Ut labores minimum atomorum pro. Laudem tibique ut has.</p>
-      <p>Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Cu mei vide viris gloriatur, at populo eripuit sit.</p>
+       Board
+      <div class="col">
+        ToDo
+        <sortable-list on-sort-finish="_onSortFinish" dragging="{{dragging}}">
+          <div class="item">Item A</div>
+          <div class="item">Item B</div>
+          <div class="item">Item C</div>
+        </sortable-list>
+      </div>
+      <div class="col">
+        WIP
+        <sortable-list on-sort-finish="_onSortFinish" dragging="{{dragging}}">
+          <div class="item">Item A</div>
+          <div class="item">Item B</div>
+          <div class="item">Item C</div>
+        </sortable-list>
+      </div>
+      <div class="col">
+        Done
+        <sortable-list on-sort-finish="_onSortFinish" dragging="{{dragging}}">
+          <div class="item">Item A</div>
+          <div class="item">Item B</div>
+          <div class="item">Item C</div>
+        </sortable-list>
+      </div>
     </div>
   </template>
 
   <script>
     class MyView1 extends Polymer.Element {
-      static get is() { return 'my-view1'; }
+      static get is() {
+        return 'my-view1';
+      }
     }
 
     window.customElements.define(MyView1.is, MyView1);
