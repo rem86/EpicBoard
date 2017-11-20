@@ -12,6 +12,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="../bower_components/sortable-list/sortable-list.html">
 <link rel="import" href="../bower_components/iron-icons/hardware-icons.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="../bower_components/paper-input/paper-textarea.html">
 <dom-module id="my-view1">
@@ -26,10 +27,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         color: var(--paper-pink-500);
         --paper-icon-button-ink-color: var(--paper-indigo-500);
       }
+
+      paper-icon-button.blueN {
+        color: var(--paper-pink-100);
+        --paper-icon-button-ink-color: var(--paper-indigo-500);
+      }
+
       paper-input {
-    max-width: 150px;
-    margin: auto;
-  }
+        max-width: 150px;
+        margin: auto;
+      }
+
       paper-fab {
         display: inline-block;
         float: right;
@@ -47,40 +55,55 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         ToDo
         <sortable-list on-sort-finish="_onSortFinish" dragging="{{dragging}}" sortable=".item">
 
-            <template is="dom-repeat" items="{{ToDo}}" as="item">
-                <div class="item">
-               
+          <template id="lToDo" is="dom-repeat" items="{{ToDo}}" as="item">
+            <div class="item">
 
-              <paper-icon-button ident$="{{item.id}}" icon="hardware:keyboard-arrow-left" on-tap="onClose" class="blue" hidden={{!narrow}}>
-                </paper-icon-button>
-                {{item}}
-                <paper-icon-button ident$="{{item.id}}" icon="hardware:keyboard-arrow-right" on-tap="onClose" class="blue" hidden={{!narrow}}>
-                  </paper-icon-button>
+              <paper-icon-button ident$="{{item}}" icon="icons:delete-forever" on-tap="_onTrash" class="blueN">
+              </paper-icon-button>
+              {{item}}
+              <paper-icon-button ident$="{{item}}" icon="hardware:keyboard-arrow-right" on-tap="_onWIP" class="blue">
+              </paper-icon-button>
 
-          </div>
-        </template>
-        
+            </div>
+          </template>
+
         </sortable-list>
 
         <div>
-          <paper-fab mini label="+"></paper-fab>
+          <paper-fab mini label="+" on-tap="_addToDo"></paper-fab>
         </div>
       </div>
       <div class="col">
         WIP
-        <sortable-list on-sort-finish="_onSortFinish" dragging="{{dragging}}">
-          <div class="item">Item A</div>
-          <div class="item">Item B</div>
-          <div class="item">Item C</div>
+        <sortable-list on-sort-finish="_onSortFinish" dragging="{{dragging}}" sortable=".item">
+          <template id="lWIP" is="dom-repeat" items="{{WIP}}" as="item">
+            <div class="item">
+
+              <paper-icon-button ident$="{{item}}" icon="hardware:keyboard-arrow-left" on-tap="_onToDo" class="blue">
+              </paper-icon-button>
+              {{item}}
+              <paper-icon-button ident$="{{item}}" icon="hardware:keyboard-arrow-right" on-tap="_onDone" class="blue">
+              </paper-icon-button>
+
+            </div>
+          </template>
         </sortable-list>
       </div>
       <div class="col">
         Done
-        <sortable-list on-sort-finish="_onSortFinish" dragging="{{dragging}}">
-          <div class="item">Item A</div>
-          <div class="item">Item B</div>
-          <div class="item">Item C</div>
-        </sortable-list>
+        <sortable-list on-sort-finish="_onSortFinish" dragging="{{dragging}}" sortable=".item">
+          <template id="lDone" is="dom-repeat" items="{{Done}}" as="item">
+            <div class="item">
+
+              <paper-icon-button ident$="{{item}}" icon="hardware:keyboard-arrow-left" on-tap="_onDToDo" class="blue">
+              </paper-icon-button>
+              {{item}}
+              <paper-icon-button ident$="{{item}}" icon="icons:check" on-tap="_onDToDo" class="blue">
+              </paper-icon-button>
+
+            </div>
+          </template>
+        </sortable-list>  
       </div>
     </div>
   </template>
@@ -90,26 +113,64 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       static get is() {
         return 'my-view1';
       }
-      static get properties(){
+      static get properties() {
         return {
           ToDo: {
             type: Array,
-            value: ["Item1","Item2","Item3"]
+            value: ["Item1", "Item2", "Item3"]
           },
           WIP: {
             type: Array,
-            value: ["WItem1","WItem2","WItem3"]
+            value: ["WItem1", "WItem2", "WItem3"]
           },
           Done: {
             type: Array,
-            value: ["DItem1","DItem2","DItem3"]
+            value: ["DItem1", "DItem2", "DItem3"]
           }
         }
       }
       _onSortFinish(event) {
-       const sortedItem = event.detail.target;
-     }
+        const sortedItem = event.detail.target;
+      }
+      _addToDo() {
+        this.ToDo.push("Item");
+        console.log(this.ToDo);
+        this.$.lToDo.render();
+      }
+      _onTrash() {
+        this.ToDo.splice(this.ToDo.lastIndexOf(event.target.getAttribute('ident')),1);
+        this.$.lToDo.render();
+      }
 
+      _onWIP() {
+        // this.respuesta = event.target.getAttribute('ident')  ;
+        this.WIP.push(event.target.getAttribute('ident'));
+        this.ToDo.splice(this.ToDo.lastIndexOf(event.target.getAttribute('ident')),1);
+        this.$.lWIP.render();
+        this.$.lToDo.render();
+
+      }
+      _onToDo() {
+        // this.respuesta = event.target.getAttribute('ident')  ;
+        this.ToDo.push(event.target.getAttribute('ident'));
+        this.WIP.splice(this.WIP.lastIndexOf(event.target.getAttribute('ident')),1);
+        this.$.lWIP.render();
+        this.$.lToDo.render();
+      }
+      _onDToDo() {
+        // this.respuesta = event.target.getAttribute('ident')  ;
+        this.WIP.push(event.target.getAttribute('ident'));
+        this.Done.splice(this.Done.lastIndexOf(event.target.getAttribute('ident')),1);
+        this.$.lWIP.render();
+        this.$.lDone.render();
+      }
+      _onDone() {
+        // this.respuesta = event.target.getAttribute('ident')  ;
+        this.Done.push(event.target.getAttribute('ident'));
+        this.WIP.splice(this.WIP.lastIndexOf(event.target.getAttribute('ident')),1);
+        this.$.lWIP.render();
+        this.$.lDone.render();
+      }
     }
 
     window.customElements.define(MyView1.is, MyView1);
