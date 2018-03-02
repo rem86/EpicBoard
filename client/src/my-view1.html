@@ -16,6 +16,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="../bower_components/paper-input/paper-textarea.html">
 <link rel="import" href="../bower_components/iron-autogrow-textarea/iron-autogrow-textarea.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <dom-module id="my-view1">
   <template>
     <style include="shared-styles">
@@ -137,42 +138,42 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _onSortFinish(event) {
         const sortedItem = event.detail.target;
       }
-      _addToDo() {
+      _addToDo(e) {
         this.ToDo.push("Item");
         console.log(this.ToDo);
         this.$.lToDo.render();
       }
-      _onTrash() {
-        this.ToDo.splice(this.ToDo.lastIndexOf(event.target.getAttribute('ident')),1);
+      _onTrash(e) {
+        this.ToDo.splice(this.ToDo.lastIndexOf(e.model.item),1);
         this.$.lToDo.render();
       }
 
-      _onWIP() {
+      _onWIP(e) {
         // this.respuesta = event.target.getAttribute('ident')  ;
-        this.WIP.push(event.target.getAttribute('ident'));
-        this.ToDo.splice(this.ToDo.lastIndexOf(event.target.getAttribute('ident')),1);
+        this.WIP.push(e.model.item);
+        this.ToDo.splice(this.ToDo.lastIndexOf(e.model.item),1);
         this.$.lWIP.render();
         this.$.lToDo.render();
 
       }
-      _onToDo() {
+      _onToDo(e) {
         // this.respuesta = event.target.getAttribute('ident')  ;
-        this.ToDo.push(event.target.getAttribute('ident'));
-        this.WIP.splice(this.WIP.lastIndexOf(event.target.getAttribute('ident')),1);
+        this.ToDo.push(e.model.item);
+        this.WIP.splice(this.WIP.lastIndexOf(e.model.item),1);
         this.$.lWIP.render();
         this.$.lToDo.render();
       }
-      _onDToDo() {
+      _onDToDo(e) {
         // this.respuesta = event.target.getAttribute('ident')  ;
-        this.WIP.push(event.target.getAttribute('ident'));
-        this.Done.splice(this.Done.lastIndexOf(event.target.getAttribute('ident')),1);
+        this.WIP.push(e.model.item);
+        this.Done.splice(this.Done.lastIndexOf(e.model.item),1);
         this.$.lWIP.render();
         this.$.lDone.render();
       }
-      _onDone() {
+      _onDone(e) {
         // this.respuesta = event.target.getAttribute('ident')  ;
-        this.Done.push(event.target.getAttribute('ident'));
-        this.WIP.splice(this.WIP.lastIndexOf(event.target.getAttribute('ident')),1);
+        this.Done.push(e.model.item);
+        this.WIP.splice(this.WIP.lastIndexOf(e.model.item),1);
         this.$.lWIP.render();
         this.$.lDone.render();
       }
