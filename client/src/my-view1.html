@@ -49,6 +49,48 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         font-size: 16px;
         --paper-fab-background: #2196F3;
       }
+      /* entire container, keeps perspective */
+.flip-container {
+	perspective: 1000px;
+}
+	/* flip the pane when hovered */
+	.flip-container:hover .flipper, .flip-container.hover .flipper {
+		transform: rotateY(180deg);
+	}
+
+.flip-container, .front, .back {
+	width: 100px;
+	height: 200px;
+}
+
+/* flip speed goes here */
+.flipper {
+	transition: 0.6s;
+	transform-style: preserve-3d;
+
+	position: relative;
+}
+
+/* hide back of pane during swap */
+.front, .back {
+	backface-visibility: hidden;
+
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+/* front pane, placed above back */
+.front {
+	z-index: 2;
+	/* for firefox 31 */
+	transform: rotateY(0deg);
+}
+
+/* back, initially hidden pane */
+.back {
+	transform: rotateY(180deg);
+}
     </style>
     <div class="card2">
       <p>Board</p>
@@ -59,16 +101,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           <template id="lToDo" is="dom-repeat" items="{{ToDo}}" as="item">
             <div class="item">
+                <paper-icon-button ident$="{{item}}" icon="icons:delete-forever" on-tap="_onTrash" class="blueN">
+                  </paper-icon-button>
+                  {{item}}
+                  <paper-icon-button ident$="{{item}}" icon="hardware:keyboard-arrow-right" on-tap="_onWIP" class="blue">
+                  </paper-icon-button>
 
-              <paper-icon-button ident$="{{item}}" icon="icons:delete-forever" on-tap="_onTrash" class="blueN">
-              </paper-icon-button>
-              {{item}}
-              <paper-icon-button ident$="{{item}}" icon="hardware:keyboard-arrow-right" on-tap="_onWIP" class="blue">
-              </paper-icon-button>
-              
-              <iron-autogrow-textarea style="height: 25px; width: 140px;font-size: 8px;text-align: left;"></iron-autogrow-textarea>
-              <iron-autogrow-textarea style="height: 18px; width: 140px;font-size: 8px;text-align: left;"></iron-autogrow-textarea>
-              
+                <div class="flip-container" ontouchstart="this.classList.toggle('hover');">
+                    <div class="flipper">
+                      <div class="front">
+                            
+                                          
+                      </div>
+                      <div class="back">
+                          <iron-autogrow-textarea style="height: 25px; width: 140px;font-size: 8px;text-align: left;"></iron-autogrow-textarea>
+                          <iron-autogrow-textarea style="height: 18px; width: 140px;font-size: 8px;text-align: left;"></iron-autogrow-textarea>
+
+                      </div>
+                    </div>
+                  </div>
 
             </div>
           </template>
